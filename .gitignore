@@ -1,0 +1,81 @@
+# .gitignore for JSW Paint Estimator
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+!new_frontend/src/lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env.local
+.env.*.local
+.env
+
+google_vision_credentials.json
+
+# Logs
+*.log
+logs/
+app.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# YOLO Models (large files)
+cv_models/yolo/*.pt
+cv_models/yolo/*.weights
+cv_models/yolo/runs/
+
+# Images and uploads
+uploads/
+static/uploads/
+temp/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+!static/sample_*.jpg
+
+# Database
+*.db
+*.sqlite3
+
+# Docker
+.dockerignore
+
+# OS
+Thumbs.db

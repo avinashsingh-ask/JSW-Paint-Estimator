@@ -1,0 +1,103 @@
+{
+  "paint_products": {
+    "interior": {
+      "premium_emulsion": {
+        "name": "JSW Premium Emulsion",
+        "type": "interior",
+        "coverage_per_liter": 130,
+        "price_per_liter": 450,
+        "finish": "matt",
+        "coats_recommended": 2,
+        "description": "Premium quality emulsion for interior walls"
+      },
+      "luxury_emulsion": {
+        "name": "JSW Luxury Emulsion",
+        "type": "interior",
+        "coverage_per_liter": 120,
+        "price_per_liter": 380,
+        "finish": "silk",
+        "coats_recommended": 2,
+        "description": "Luxury silk finish emulsion"
+      },
+      "distemper": {
+        "name": "JSW Distemper",
+        "type": "interior",
+        "coverage_per_liter": 140,
+        "price_per_liter": 180,
+        "finish": "matt",
+        "coats_recommended": 2,
+        "description": "Economic distemper for interior walls"
+      }
+    },
+    "exterior": {
+      "weather_proof": {
+        "name": "JSW Weather Proof Exterior",
+        "type": "exterior",
+        "coverage_per_liter": 110,
+        "price_per_liter": 520,
+        "finish": "matt",
+        "coats_recommended": 2,
+        "description": "Weather resistant exterior paint"
+      },
+      "apex_ultima": {
+        "name": "JSW Apex Ultima",
+        "type": "exterior",
+        "coverage_per_liter": 100,
+        "price_per_liter": 680,
+        "finish": "smooth",
+        "coats_recommended": 2,
+        "description": "Premium exterior paint with superior protection"
+      }
+    }
+  },
+  "primers": {
+    "interior_primer": {
+      "name": "JSW Interior Primer",
+      "coverage_per_liter": 100,
+      "price_per_liter": 220,
+      "description": "Primer for interior walls"
+    },
+    "exterior_primer": {
+      "name": "JSW Exterior Primer",
+      "coverage_per_liter": 90,
+      "price_per_liter": 280,
+      "description": "Weather resistant primer for exterior"
+    }
+  },
+  "putty": {
+    "wall_putty": {
+      "name": "JSW Wall Putty",
+      "coverage_per_kg": 20,
+      "price_per_kg": 35,
+      "coats_recommended": 2,
+      "description": "High quality wall putty for smooth finish"
+    }
+  },
+  "room_type_defaults": {
+    "bedroom": {
+      "paint_type": "interior",
+      "recommended_product": "luxury_emulsion"
+    },
+    "hall": {
+      "paint_type": "interior",
+      "recommended_product": "premium_emulsion"
+    },
+    "kitchen": {
+      "paint_type": "interior",
+      "recommended_product": "premium_emulsion"
+    },
+    "bathroom": {
+      "paint_type": "interior",
+      "recommended_product": "premium_emulsion"
+    },
+    "exterior": {
+      "paint_type": "exterior",
+      "recommended_product": "weather_proof"
+    }
+  },
+  "calculation_factors": {
+    "wastage_factor": 1.1,
+    "door_area_multiplier": 1.0,
+    "window_area_multiplier": 1.0
+  }
+}
