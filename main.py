@@ -1,9 +1,10 @@
 """FastAPI application entry point."""
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi.exceptions import RequestValidationError
 from api import api_router
 import os
 from dotenv import load_dotenv
@@ -94,6 +95,18 @@ async def root():
             "health": "/health",
             "note": "Frontend not found. API is available at /docs"
         }
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Handle validation errors and log details for debugging."""
+    print(f"\n❌ VALIDATION ERROR on {request.method} {request.url.path}")
+    print(f"   Errors: {exc.errors()}")
+    print(f"   Body: {exc.body}")
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"detail": exc.errors(), "body": str(exc.body)[:500]}
+    )
 
 
 @app.exception_handler(Exception)

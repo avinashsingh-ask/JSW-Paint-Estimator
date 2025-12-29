@@ -1,0 +1,499 @@
+/* ========================================
+   JSW PAINTS - ANIMATIONS
+   Purposeful, Smooth Animations (150-300ms)
+   ======================================== */
+
+@import 'design-system.css';
+
+/* ========================================
+   ENTRANCE ANIMATIONS
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* ========================================
+   EXIT ANIMATIONS
+   ======================================== */
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+@keyframes scaleOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+/* ========================================
+   COUNTING / NUMBER ANIMATIONS
+   ======================================== */
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-count {
+    animation: countUp 0.3s var(--ease-out) forwards;
+}
+
+/* Individual digit animation for staggered effect */
+.digit {
+    display: inline-block;
+    animation: digitFlip 0.3s var(--ease-out) backwards;
+}
+
+@keyframes digitFlip {
+    from {
+        opacity: 0;
+        transform: rotateX(90deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: rotateX(0);
+    }
+}
+
+/* ========================================
+   CARD & HOVER ANIMATIONS
+   ======================================== */
+
+.animate-card-hover {
+    transition: transform var(--duration-base) var(--ease-out),
+        box-shadow var(--duration-base) var(--ease-out);
+}
+
+.animate-card-hover:hover {
+    transform: translateY(-4px);
+}
+
+/* Elevation levels */
+.hover-elevate-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.hover-elevate-md:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.hover-elevate-lg:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* ========================================
+   PROGRESS & LOADING ANIMATIONS
+   ======================================== */
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg,
+            var(--neutral-200) 0%,
+            var(--neutral-100) 50%,
+            var(--neutral-200) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Progress bar fill animation */
+@keyframes progressFill {
+    from {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+
+    to {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+.animate-progress {
+    animation: progressFill 0.6s var(--ease-out) forwards;
+}
+
+/* ========================================
+   UPLOAD ZONE ANIMATIONS
+   ======================================== */
+
+@keyframes uploadPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+.upload-zone--active {
+    animation: uploadPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes uploadSuccess {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.upload-zone--success {
+    animation: uploadSuccess 0.5s var(--ease-out);
+}
+
+/* ========================================
+   STEP TRANSITION ANIMATIONS
+   ======================================== */
+
+@keyframes stepIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes stepOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+}
+
+.step-enter {
+    animation: stepIn var(--duration-smooth) var(--ease-out);
+}
+
+.step-exit {
+    animation: stepOut var(--duration-base) var(--ease-in);
+}
+
+/* ========================================
+   ICON ANIMATIONS
+   ======================================== */
+
+@keyframes iconBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.icon-bounce {
+    animation: iconBounce 0.6s var(--ease-in-out) infinite;
+}
+
+@keyframes iconSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.icon-spin {
+    animation: iconSpin 1s linear infinite;
+}
+
+/* ========================================
+   SUCCESS/ERROR ANIMATIONS
+   ======================================== */
+
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.checkmark {
+    stroke-dasharray: 100;
+    animation: checkmark 0.4s var(--ease-out) forwards;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-4px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.5s var(--ease-in-out);
+}
+
+/* ========================================
+   UTILITY ANIMATION CLASSES
+   ======================================== */
+
+/* Delays */
+.delay-100 {
+    animation-delay: 100ms;
+}
+
+.delay-200 {
+    animation-delay: 200ms;
+}
+
+.delay-300 {
+    animation-delay: 300ms;
+}
+
+.delay-500 {
+    animation-delay: 500ms;
+}
+
+/* Durations */
+.duration-fast {
+    animation-duration: var(--duration-fast);
+}
+
+.duration-base {
+    animation-duration: var(--duration-base);
+}
+
+.duration-smooth {
+    animation-duration: var(--duration-smooth);
+}
+
+/* Fill modes */
+.fill-forwards {
+    animation-fill-mode: forwards;
+}
+
+.fill-backwards {
+    animation-fill-mode: backwards;
+}
+
+.fill-both {
+    animation-fill-mode: both;
+}
+
+/* ========================================
+   RESULT DISPLAY ANIMATIONS
+   ======================================== */
+
+@keyframes resultCardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.result-card {
+    animation: resultCardSlideIn var(--duration-smooth) var(--ease-out);
+}
+
+.result-card:nth-child(1) {
+    animation-delay: 0ms;
+}
+
+.result-card:nth-child(2) {
+    animation-delay: 100ms;
+}
+
+.result-card:nth-child(3) {
+    animation-delay: 200ms;
+}
+
+.result-card:nth-child(4) {
+    animation-delay: 300ms;
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Use GPU acceleration for transform and opacity */
+.gpu-accelerate {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

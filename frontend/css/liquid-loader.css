@@ -1,0 +1,317 @@
+/* ========================================
+   LIQUID LOADER ANIMATION
+   Premium Loading Component
+   ======================================== */
+
+.loading-overlay--liquid {
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(10px);
+}
+
+/* Hide default spinner when using liquid loader */
+.loading-overlay--liquid .spinner {
+    display: none;
+}
+
+/* Liquid Loader Container */
+.liquid-loader {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Individual Liquid Bar */
+.liquid-bar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+}
+
+/* Animated Droplet */
+.droplet {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    opacity: 0;
+    filter: blur(0.5px);
+    transition: all 0.5s ease-out;
+}
+
+/* Bar Fill with Liquid Effects */
+.bar-fill {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    filter: blur(0.3px);
+    transition: all 0.2s ease-out;
+}
+
+/* Surface Tension Effect */
+.surface-tension {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+    border-radius: 20px;
+    z-index: 2;
+}
+
+/* Liquid Wave Effect */
+.liquid-wave {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    border-radius: 20px;
+}
+
+/* Shimmer Effect */
+.shimmer {
+    position: absolute;
+    inset: 0;
+    width: 140%;
+    left: -20%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+    border-radius: 20px;
+}
+
+/* Bubble Effect */
+.bubble {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    top: 20%;
+    left: 30%;
+}
+
+/* Base Droplet */
+.base-droplet {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: 8px;
+    filter: blur(0.2px);
+    transition: all 0.3s ease;
+}
+
+/* Color Gradients for Each Bar */
+.liquid-bar[data-index="0"] .droplet,
+.liquid-bar[data-index="0"] .bar-fill,
+.liquid-bar[data-index="0"] .base-droplet {
+    background: linear-gradient(to top, #a855f7, #ec4899);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.liquid-bar[data-index="1"] .droplet,
+.liquid-bar[data-index="1"] .bar-fill,
+.liquid-bar[data-index="1"] .base-droplet {
+    background: linear-gradient(to top, #3b82f6, #a855f7);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.liquid-bar[data-index="2"] .droplet,
+.liquid-bar[data-index="2"] .bar-fill,
+.liquid-bar[data-index="2"] .base-droplet {
+    background: linear-gradient(to top, #06b6d4, #3b82f6);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+.liquid-bar[data-index="3"] .droplet,
+.liquid-bar[data-index="3"] .bar-fill,
+.liquid-bar[data-index="3"] .base-droplet {
+    background: linear-gradient(to top, #10b981, #06b6d4);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.liquid-bar[data-index="4"] .droplet,
+.liquid-bar[data-index="4"] .bar-fill,
+.liquid-bar[data-index="4"] .base-droplet {
+    background: linear-gradient(to top, #eab308, #10b981);
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+}
+
+.liquid-bar[data-index="5"] .droplet,
+.liquid-bar[data-index="5"] .bar-fill,
+.liquid-bar[data-index="5"] .base-droplet {
+    background: linear-gradient(to top, #f97316, #eab308);
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+}
+
+.liquid-bar[data-index="6"] .droplet,
+.liquid-bar[data-index="6"] .bar-fill,
+.liquid-bar[data-index="6"] .base-droplet {
+    background: linear-gradient(to top, #ef4444, #f97316);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+/* Liquid Wave Animation */
+@keyframes liquidWave {
+
+    0%,
+    100% {
+        height: 20px;
+    }
+
+    25% {
+        height: 80px;
+    }
+
+    50% {
+        height: 40px;
+    }
+
+    75% {
+        height: 70px;
+    }
+}
+
+/* Apply Staggered Animations */
+.liquid-bar[data-index="0"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0s;
+}
+
+.liquid-bar[data-index="1"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0.128s;
+}
+
+.liquid-bar[data-index="2"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0.256s;
+}
+
+.liquid-bar[data-index="3"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0.384s;
+}
+
+.liquid-bar[data-index="4"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0.512s;
+}
+
+.liquid-bar[data-index="5"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0.64s;
+}
+
+.liquid-bar[data-index="6"] .bar-fill {
+    animation: liquidWave 1.6s ease-in-out infinite;
+    animation-delay: 0.768s;
+}
+
+/* Droplet Float Animation */
+@keyframes dropletFloat {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.5);
+    }
+
+    30%,
+    70% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.liquid-bar[data-index="0"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 0.9s;
+}
+
+.liquid-bar[data-index="1"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 1.028s;
+}
+
+.liquid-bar[data-index="2"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 1.156s;
+}
+
+.liquid-bar[data-index="3"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 1.284s;
+}
+
+.liquid-bar[data-index="4"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 1.412s;
+}
+
+.liquid-bar[data-index="5"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 1.54s;
+}
+
+.liquid-bar[data-index="6"] .droplet {
+    animation: dropletFloat 1.6s ease-in-out infinite;
+    animation-delay: 1.668s;
+}
+
+/* Base Droplet Pulse */
+@keyframes basePulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(0.6);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.base-droplet {
+    animation: basePulse 1.2s ease-in-out infinite;
+}
+
+.liquid-bar[data-index="0"] .base-droplet {
+    animation-delay: 0s;
+}
+
+.liquid-bar[data-index="1"] .base-droplet {
+    animation-delay: 0.171s;
+}
+
+.liquid-bar[data-index="2"] .base-droplet {
+    animation-delay: 0.342s;
+}
+
+.liquid-bar[data-index="3"] .base-droplet {
+    animation-delay: 0.513s;
+}
+
+.liquid-bar[data-index="4"] .base-droplet {
+    animation-delay: 0.684s;
+}
+
+.liquid-bar[data-index="5"] .base-droplet {
+    animation-delay: 0.855s;
+}
+
+.liquid-bar[data-index="6"] .base-droplet {
+    animation-delay: 1.026s;
+}
+
+/* Loading Text */
+.loading-text {
+    color: white;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    text-align: center;
+}

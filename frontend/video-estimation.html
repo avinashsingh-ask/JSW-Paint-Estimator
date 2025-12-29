@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Estimation - JSW Paint Estimator</title>
+    <meta name="description" content="Upload room walkthrough video for intelligent dimension analysis">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/estimation-pages.css">
+    <link rel="stylesheet" href="css/liquid-loader.css">
+    <link rel="stylesheet" href="css/manual-input-modal.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-bar__container">
+            <a href="landing.html" class="nav-bar__logo">
+                <img src="jsw-logo-new.jpg" alt="JSW Paints" class="nav-bar__logo-img">
+                <span class="nav-bar__title">Smart Paint Estimator</span>
+            </a>
+            <div class="nav-bar__actions">
+                <a href="landing.html" class="btn btn--secondary btn--sm">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 14L2 8l6-6M2 8h12" />
+                    </svg>
+                    Back
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="main__container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-header__title">Video-Based Estimation</h1>
+            </div>
+
+            <!-- Upload Card -->
+            <div class="estimation-card">
+                <form id="video-form" enctype="multipart/form-data">
+                    <!-- Upload Zone -->
+                    <div id="upload-section">
+                        <div class="upload-zone" id="video-drop-zone">
+                            <div class="upload-zone__icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="8" y="10" width="32" height="28" rx="2" />
+                                    <circle cx="24" cy="24" r="6" />
+                                    <path d="M40 20l-8-4v16l8-4" />
+                                </svg>
+                            </div>
+                            <h3 class="upload-zone__title">Drop video here or click to browse</h3>
+                            <p class="upload-zone__subtitle">MP4, MOV, AVI | Max 50MB | 10-30 seconds recommended</p>
+                            <input type="file" id="video-input" accept="video/*" hidden>
+                            <button type="button" class="btn btn--secondary"
+                                onclick="document.getElementById('video-input').click()">
+                                Select Video
+                            </button>
+                            <p class="upload-zone__hint">Pan slowly around the room for best results</p>
+                        </div>
+
+                        <!-- Video Preview -->
+                        <div id="video-preview" style="display: none; margin-top: 2rem;">
+                            <h3 style="margin-bottom: 1rem;">Uploaded Video</h3>
+                            <video id="video-preview-player" controls
+                                style="max-width: 100%; border-radius: 16px; box-shadow: var(--shadow-lg);"></video>
+                            <div
+                                style="margin-top: 1rem; padding: 1rem; background: var(--neutral-50); border-radius: var(--radius-lg);">
+                                <p id="video-info"
+                                    style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;"></p>
+                            </div>
+                            <button type="button" class="btn btn--tertiary" style="margin-top: 1rem;"
+                                onclick="removeVideo()">
+                                Remove & Upload Different
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Section (shown after upload) -->
+                    <div id="config-section" style="display: none;">
+                        <div class="form-section">
+                            <h2 class="form-section__title">Room Details</h2>
+                            <div class="form-grid form-grid--2">
+                                <div class="form-field">
+                                    <label for="room_type">Room Type</label>
+                                    <select id="room_type" name="room_type" required>
+                                        <option value="bedroom">Bedroom</option>
+                                        <option value="hall">Hall</option>
+                                        <option value="kitchen">Kitchen</option>
+                                        <option value="bathroom">Bathroom</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="paint_type">Paint Type</label>
+                                    <select id="paint_type" name="paint_type" required>
+                                        <option value="interior" selected>Interior Paint</option>
+                                        <option value="exterior">Exterior Paint</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn--primary btn--lg">
+                                Analyze Video & Calculate
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M6 4l8 6-8 6V4z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-container" class="results-container" style="display: none;"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <p class="footer__text">POC for JSW Paints</p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay with Liquid Loader -->
+    <div id="loading-overlay" class="loading-overlay loading-overlay--liquid" style="display: none;">
+        <div class="liquid-loader">
+            <div class="liquid-bar" data-index="0">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="1">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="2">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="3">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="4">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="5">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="6">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+        </div>
+        <p class="loading-text">Processing video...</p>
+    </div>
+    <p style="font-size: var(--text-sm); color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem; text-align: center;">
+        Extracting keyframes and analyzing dimensions...
+    </p>
+    </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="js/manual-input-modal.js"></script>
+    <script src="js/video-estimation-new.js"></script>
+    <script>
+        // Initialize manual input modal (Phase 4)
+        const manualModal = new ManualInputModal();
+        manualModal.onSubmit((data) => {
+            if (data.user_provided) {
+                console.log('✅ User provided ceiling height:', data.ceiling_height, 'ft');
+                // Future: Re-run estimation with manual input as ground truth
+            } else {
+                console.log('ℹ️  User skipped manual input, using automated estimate');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Estimation - JSW Paint Estimator</title>
+    <meta name="description" content="Upload room images for intelligent paint estimation">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/estimation-pages.css">
+    <link rel="stylesheet" href="css/liquid-loader.css">
+    <link rel="stylesheet" href="css/liquid-loader.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-bar__container">
+            <a href="landing.html" class="nav-bar__logo">
+                <img src="jsw-logo-new.jpg" alt="JSW Paints" class="nav-bar__logo-img">
+                <span class="nav-bar__title">Smart Paint Estimator</span>
+            </a>
+            <div class="nav-bar__actions">
+                <a href="landing.html" class="btn btn--secondary btn--sm">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 14L2 8l6-6M2 8h12" />
+                    </svg>
+                    Back
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="main__container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-header__title" id="page-title">Image Estimation</h1>
+                <p class="page-header__subtitle" id="page-subtitle">Upload room images for analysis</p>
+            </div>
+
+            <!-- Upload Card -->
+            <div class="estimation-card">
+                <!-- Single Image Upload -->
+                <div id="single-upload-container" style="display: none;">
+                    <form id="single-upload-form" enctype="multipart/form-data">
+                        <div class="upload-zone" id="single-drop-zone">
+                            <div class="upload-zone__icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M24 16v16m-8-8h16M40 24a16 16 0 11-32 0 16 16 0 0132 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="upload-zone__title">Drop image here or click to browse</h3>
+                            <p class="upload-zone__subtitle">Supported: JPG, PNG (max 10MB)</p>
+                            <input type="file" id="single-image-input" accept="image/*" hidden>
+                            <button type="button" class="btn btn--secondary"
+                                onclick="document.getElementById('single-image-input').click()">
+                                Select Image
+                            </button>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div id="single-preview" style="display: none; margin-top: 2rem;">
+                            <img id="single-preview-img"
+                                style="max-width: 100%; border-radius: 16px; box-shadow: var(--shadow-lg);">
+                            <button type="button" class="btn btn--tertiary" style="margin-top: 1rem;"
+                                onclick="removeSingleImage()">
+                                Remove Image
+                            </button>
+                        </div>
+
+                        <!-- Paint Options for Single -->
+                        <div id="single-options" style="display: none; margin-top: 2rem;">
+                            <div class="form-section">
+                                <h2 class="form-section__title">Paint Options</h2>
+                                <div class="form-grid form-grid--2">
+                                    <div class="form-field">
+                                        <label for="single_room_type">Room Type</label>
+                                        <select id="single_room_type">
+                                            <option value="bedroom">Bedroom</option>
+                                            <option value="hall">Hall</option>
+                                            <option value="kitchen">Kitchen</option>
+                                            <option value="bathroom">Bathroom</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="single_paint_type">Paint Type</label>
+                                        <select id="single_paint_type">
+                                            <option value="interior">Interior Paint</option>
+                                            <option value="exterior">Exterior Paint</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn--primary btn--lg">
+                                    Analyze Image
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Multi Image Upload -->
+                <div id="multi-upload-container" style="display: none;">
+                    <form id="multi-upload-form" enctype="multipart/form-data">
+                        <div class="upload-zone" id="multi-drop-zone">
+                            <div class="upload-zone__icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="8" y="8" width="14" height="14" rx="2" />
+                                    <rect x="26" y="8" width="14" height="14" rx="2" />
+                                    <rect x="8" y="26" width="14" height="14" rx="2" />
+                                    <rect x="26" y="26" width="14" height="14" rx="2" />
+                                </svg>
+                            </div>
+                            <h3 class="upload-zone__title">Drop 2-4 wall images here</h3>
+                            <p class="upload-zone__subtitle">For large room comprehensive estimation</p>
+                            <input type="file" id="multi-image-input" accept="image/*" multiple hidden>
+                            <button type="button" class="btn btn--secondary"
+                                onclick="document.getElementById('multi-image-input').click()">
+                                Select Images
+                            </button>
+                        </div>
+
+                        <!-- Multi Preview Grid -->
+                        <div id="multi-preview-grid" style="display: none; margin-top: 2rem;">
+                            <h3 style="margin-bottom: 1rem;">Uploaded Walls: <span id="wall-count">0</span></h3>
+                            <div id="wall-grid"
+                                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                                <!-- Images will be added here -->
+                            </div>
+                        </div>
+
+                        <!-- Paint Options for Multi -->
+                        <div id="multi-options" style="display: none; margin-top: 2rem;">
+                            <div class="form-section">
+                                <h2 class="form-section__title">Paint Options</h2>
+                                <div class="form-grid form-grid--2">
+                                    <div class="form-field">
+                                        <label for="multi_room_type">Room Type</label>
+                                        <select id="multi_room_type">
+                                            <option value="bedroom">Bedroom</option>
+                                            <option value="hall">Hall</option>
+                                            <option value="kitchen">Kitchen</option>
+                                            <option value="bathroom">Bathroom</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="multi_paint_type">Paint Type</label>
+                                        <select id="multi_paint_type">
+                                            <option value="interior">Interior Paint</option>
+                                            <option value="exterior">Exterior Paint</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn--primary btn--lg">
+                                    Analyze Images
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-container" class="results-container" style="display: none;"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <p class="footer__text">POC for JSW Paints</p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay with Liquid Loader -->
+    <div id="loading-overlay" class="loading-overlay loading-overlay--liquid" style="display: none;">
+        <div class="liquid-loader">
+            <div class="liquid-bar" data-index="0">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="1">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="2">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="3">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="4">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="5">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="6">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+        </div>
+        <p class="loading-text">Analyzing images...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="js/image-estimation.js"></script>
+</body>
+
+</html>

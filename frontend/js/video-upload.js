@@ -159,7 +159,7 @@ async function handleVideoEstimation() {
         if (height) formData.append('height', height);
 
         // Show loading
-        showLoading('🎥 Processing video and analyzing frames...<br><small>This may take a moment</small>');
+        showLoading('PROCESSING VIDEO AND ANALYZING');
 
         // Call API
         const response = await fetch(`${API_BASE_URL}/api/v1/estimate/cv/video`, {
@@ -225,6 +225,15 @@ function displayVideoResults(data) {
             ${data.detection_results ? `
                 <div class="card">
                     <h3 style="margin-bottom: 1rem; color: var(--dark-color);">🔍 Aggregated Detection Results</h3>
+                    
+                    <!-- Detection Method Info -->
+                    <div style="margin-bottom: 1rem; padding: 0.75rem; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                        <div style="font-size: 0.9rem; color: #856404;">
+                            <strong>ℹ️ Detection Method:</strong> Using computer vision edge detection. 
+                            For best accuracy, use the <strong>Manual Dimension Override</strong> option above.
+                        </div>
+                    </div>
+                    
                     <div class="detection-info">
                         <div class="detection-badge">
                             🚪 ${data.detection_results.detected_doors} Door${data.detection_results.detected_doors !== 1 ? 's' : ''} Detected
@@ -237,9 +246,10 @@ function displayVideoResults(data) {
                         </div>
                     </div>
                     ${conf.detection_confidence ? `
-                        <div style="margin-top: 1rem; padding: 1rem; background: #e8f5e9; border-radius: 8px;">
-                            <div style="font-size: 0.9rem; color: #2e7d32;">
+                        <div style="margin-top: 1rem; padding: 1rem; background: ${conf.detection_confidence > 0.7 ? '#e8f5e9' : '#fff3cd'}; border-radius: 8px;">
+                            <div style="font-size: 0.9rem; color: ${conf.detection_confidence > 0.7 ? '#2e7d32' : '#856404'};">
                                 <strong>Detection Confidence:</strong> ${Math.round(conf.detection_confidence * 100)}% (consistent across frames)
+                                ${conf.detection_confidence < 0.7 ? '<br><small>⚠️ Low confidence - consider using manual dimension input for accuracy</small>' : ''}
                             </div>
                         </div>
                     ` : ''}

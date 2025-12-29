@@ -31,7 +31,7 @@ class FloorPlanOCR:
         r"(\d+)\s*-\s*(\d+)\s*[xX×]\s*(\d+)\s*-\s*(\d+)",
     ]
     
-    def __init__(self, confidence_threshold: float = 60.0, use_easyocr: bool = True, use_google_vision: bool = True, use_azure_openai: bool = True):
+    def __init__(self, confidence_threshold: float = 60.0, use_easyocr: bool = True, use_google_vision: bool = True, use_azure_openai: bool = True, use_gemini: bool = True):
         """
         Initialize OCR service.
         
@@ -39,23 +39,43 @@ class FloorPlanOCR:
             confidence_threshold: Minimum OCR confidence score (0-100)
             use_easyocr: Use EasyOCR (better for floor plans) if available
             use_google_vision: Use Google Vision API (good for blueprints) if available
-            use_azure_openai: Use Azure OpenAI GPT-4 Vision (BEST - 98% accuracy) if available
+            use_azure_openai: Use Azure OpenAI GPT-4 Vision (98% accuracy) if available
+            use_gemini: Use Google Gemini 1.5 Pro (PRIMARY - Testing for comparison) if available
         """
         self.confidence_threshold = confidence_threshold
         self.easyocr_reader = None
         self.google_vision = None
         self.azure_openai = None
+        self.gemini = None
         self.use_easyocr = use_easyocr
         self.use_google_vision = use_google_vision
         self.use_azure_openai = use_azure_openai
+        self.use_gemini = use_gemini
         
-        # Priority 1: Try to initialize Azure OpenAI GPT-4 Vision (BEST - intelligent extraction)
+        # Priority 1: Try to initialize Gemini (PRIMARY for testing)
+        if use_gemini:
+            try:
+                from services.gemini_ocr import GeminiOCR
+                self.gemini = GeminiOCR()
+                if self.gemini.is_available():
+                    print("✅ Google Gemini 1.5 Pro initialized (PRIMARY OCR - Testing Mode)")
+                else:
+                    self.gemini = None
+            except Exception as e:
+                print(f"⚠️  Gemini not available: {e}")
+                print("  Falling back to Azure OpenAI...")
+                self.gemini = None
+        
+        # Priority 2: Try to initialize Azure OpenAI GPT-4 Vision (FALLBACK)
         if use_azure_openai:
             try:
                 from services.azure_openai_ocr import AzureOpenAIOCR
                 self.azure_openai = AzureOpenAIOCR()
                 if self.azure_openai.is_available():
-                    print("✅ Azure OpenAI GPT-4 Vision initialized (PRIMARY OCR - 98% accuracy, AI-powered)")
+                    if self.gemini:
+                        print("✅ Azure OpenAI GPT-4 Vision initialized (FALLBACK - 98% accuracy)")
+                    else:
+                        print("✅ Azure OpenAI GPT-4 Vision initialized (PRIMARY - 98% accuracy)")
                 else:
                     self.azure_openai = None
             except Exception as e:
@@ -63,8 +83,8 @@ class FloorPlanOCR:
                 print("  Falling back to Google Vision...")
                 self.azure_openai = None
         
-        # Priority 2: Try to initialize Google Vision (if Azure not available)
-        if use_google_vision and not self.azure_openai:
+        # Priority 3: Try to initialize Google Vision (if Gemini and Azure not available)
+        if use_google_vision and not self.gemini and not self.azure_openai:
             try:
                 from services.google_vision_ocr import GoogleVisionOCR
                 self.google_vision = GoogleVisionOCR()
@@ -76,8 +96,8 @@ class FloorPlanOCR:
                 print(f"⚠️  Google Vision not available: {e}")
                 self.google_vision = None
         
-        # Priority 3: Try to initialize EasyOCR (if Vision not available)
-        if use_easyocr and not self.google_vision and not self.azure_openai:
+        # Priority 4: Try to initialize EasyOCR (if all AI services not available)
+        if use_easyocr and not self.gemini and not self.google_vision and not self.azure_openai:
             try:
                 import easyocr
                 print("🔍 Initializing EasyOCR (this may take a moment on first run)...")
@@ -90,8 +110,8 @@ class FloorPlanOCR:
                 print(f"⚠ EasyOCR initialization failed: {e}")
                 print("  Falling back to Tesseract OCR")
         
-        # Priority 4: Check if tesseract is available (LAST RESORT)
-        if not self.azure_openai and not self.google_vision and not self.easyocr_reader:
+        # Priority 5: Check if tesseract is available (LAST RESORT)
+        if not self.gemini and not self.azure_openai and not self.google_vision and not self.easyocr_reader:
             try:
                 pytesseract.get_tesseract_version()
                 print("✅ Using Tesseract OCR (LAST RESORT)")
@@ -575,14 +595,23 @@ class FloorPlanOCR:
         print(f"\n📐 Input image: {image.shape[1]}x{image.shape[0]} pixels")
         image = self.resize_if_needed(image, max_width=2000)
         
-        # Step 1: Extract text - Priority order: Azure OpenAI → Google Vision → EasyOCR → Tesseract
-        if self.azure_openai:
-            # Use Azure OpenAI GPT-4 Vision (BEST - AI-powered intelligent extraction)
+        # Step 1: Extract text - Priority order: Gemini → Azure OpenAI → Google Vision → EasyOCR → Tesseract
+        if self.gemini:
+            # Use Gemini 1.5 Pro (PRIMARY for testing)
+            print("\n🤖 [GEMINI] Using Gemini 1.5 Pro for intelligent extraction...")
+            ocr_result = self.gemini.extract_dimensions(image)
+            
+            # If Gemini returns low confidence, try GPT-4 as fallback
+            if ocr_result.get('total_dimensions_found', 0) == 0 and self.azure_openai:
+                print("⚠️  Gemini found no dimensions, trying GPT-4 fallback...")
+                ocr_result = self.azure_openai.extract_dimensions(image)
+            
+            return ocr_result
+        
+        elif self.azure_openai:
+            # Use Azure OpenAI GPT-4 Vision (FALLBACK 1 - AI-powered intelligent extraction)
             print("\n🤖 [AZURE OPENAI] Using GPT-4 Vision for intelligent extraction...")
             ocr_result = self.azure_openai.extract_dimensions(image)
-            
-            # Azure OpenAI returns dimensions directly, so we can skip the regex parsing!
-            # Just return the result as-is
             return ocr_result
         
         elif self.google_vision:

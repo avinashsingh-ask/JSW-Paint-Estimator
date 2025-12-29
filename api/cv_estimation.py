@@ -129,14 +129,26 @@ async def estimate_multiple_rooms_from_images(
     - Total paint quantity
     - Total cost
     """
+    print(f"\n✅ Multi-room endpoint reached!")
+    print(f"   Images received: {len(images) if images else 'None'}")
+    print(f"   Room data received: {bool(room_data)}")
     try:
+        # Debug logging
+        print(f"\n🔍 Multi-room request received:")
+        print(f"   Number of images: {len(images)}")
+        print(f"   Room data (raw): {room_data[:200]}...")  # First 200 chars
+        
         # Parse room data
         rooms_info = json.loads(room_data)
+        print(f"   Parsed rooms: {len(rooms_info)}")
+        print(f"   Room info: {rooms_info}")
         
         if len(images) != len(rooms_info):
+            error_msg = f"Number of images ({len(images)}) must match number of room configurations ({len(rooms_info)})"
+            print(f"   ❌ Validation Error: {error_msg}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Number of images must match number of room configurations"
+                detail=error_msg
             )
         
         # Prepare room images for processing

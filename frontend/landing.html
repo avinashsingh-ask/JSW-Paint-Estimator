@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSW Paint Estimator - Intelligent Paint Cost Estimation</title>
+    <meta name="description"
+        content="Estimate your paint cost with precision using JSW Paints' intelligent surface analysis system.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-bar__container">
+            <a href="/" class="nav-bar__logo">
+                <img src="jsw-logo-new.jpg" alt="JSW Paints" class="nav-bar__logo-img">
+                <span class="nav-bar__title">Smart Paint Estimator</span>
+            </a>
+            <div class="nav-bar__actions">
+                <button class="btn btn--icon btn--tertiary" id="help-btn" aria-label="Help">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="10" cy="10" r="8" />
+                        <path d="M10 6v4M10 14h.01" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tool-First Header -->
+    <section class="hero">
+        <div class="hero__container">
+            <h1 class="hero__title">Smart Paint Estimator</h1>
+            <p class="hero__subtitle">AI-powered estimation for accurate paint planning</p>
+        </div>
+    </section>
+
+    <!-- Estimation Methods -->
+    <main class="main">
+        <div class="main__container">
+            <h2 class="section-title">Choose Estimation Method</h2>
+            <p class="section-subtitle">Select the approach that best suits your project requirements</p>
+
+            <div class="modes-grid">
+                <!-- Blueprint Estimation -->
+                <a href="blueprint.html" class="mode-card">
+                    <div class="mode-card__icon">
+                        <img src="icons/blueprint.png" alt="" class="mode-card__icon-img">
+                    </div>
+                    <h3 class="mode-card__title">Blueprint Estimation</h3>
+                    <p class="mode-card__description">
+                        Upload architectural floor plans for automatic multi-room detection
+                    </p>
+                </a>
+
+                <!-- Manual Calculation -->
+                <a href="manual-estimation.html" class="mode-card">
+                    <div class="mode-card__icon">
+                        <img src="icons/manual.png" alt="" class="mode-card__icon-img">
+                    </div>
+                    <h3 class="mode-card__title">Manual Calculation</h3>
+                    <p class="mode-card__description">
+                        Enter room dimensions manually for instant paint cost estimation
+                    </p>
+                </a>
+
+                <!-- Video-Based Estimation -->
+                <a href="video-estimation.html" class="mode-card">
+                    <div class="mode-card__icon">
+                        <img src="icons/video.png" alt="" class="mode-card__icon-img">
+                    </div>
+                    <h3 class="mode-card__title">Video Analysis</h3>
+                    <p class="mode-card__description">
+                        Record a walkthrough video for intelligent dimension analysis
+                    </p>
+                </a>
+
+                <!-- Multiple Wall Images -->
+                <a href="image-estimation.html?mode=multi" class="mode-card">
+                    <div class="mode-card__icon">
+                        <img src="icons/multi-wall.png" alt="" class="mode-card__icon-img">
+                    </div>
+                    <h3 class="mode-card__title">Multiple Walls</h3>
+                    <p class="mode-card__description">
+                        Upload 2-4 wall images for large room estimation
+                    </p>
+                </a>
+
+                <!-- Single Wall Image -->
+                <a href="image-estimation.html?mode=single" class="mode-card">
+                    <div class="mode-card__icon">
+                        <img src="icons/single-wall.png" alt="" class="mode-card__icon-img">
+                    </div>
+                    <h3 class="mode-card__title">Single Wall</h3>
+                    <p class="mode-card__description">
+                        Quick estimation from a single room photograph
+                    </p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <p class="footer__text">Smart Paint Estimator — Proof of Concept for JSW Paints</p>
+        </div>
+    </footer>
+
+    <script src="js/landing.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+/* ========================================
+   LANDING PAGE - ENTERPRISE TOOL DASHBOARD
+   Card Grid, Layered Depth, Function-First
+   ======================================== */
+
+/* ========================================
+   HERO - TOOL-FIRST, NOT MARKETING
+   ======================================== */
+
+.hero {
+    background: var(--bg-primary);
+    padding: var(--space-12) 0 var(--space-10);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.hero__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-8);
+}
+
+.hero__title {
+    font-size: var(--text-6xl);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-3);
+    letter-spacing: var(--tracking-tight);
+}
+
+.hero__subtitle {
+    font-size: var(--text-xl);
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-4);
+    font-weight: var(--weight-medium);
+}
+
+.hero__divider {
+    width: 60px;
+    height: 2px;
+    background: var(--jsw-primary);
+    margin-bottom: var(--space-3);
+}
+
+.hero__poc {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ========================================
+   MAIN - LAYERED BACKGROUNDS
+   ======================================== */
+
+.main {
+    background: var(--neutral-100);
+    /* Slightly darker than cards */
+    padding: var(--space-16) 0 var(--space-20);
+}
+
+.main__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-8);
+}
+
+.section-title {
+    font-size: var(--text-5xl);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
+}
+
+.section-subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-8);
+}
+
+/* ========================================
+   CARD GRID - 2x3 TOOL LAYOUT
+   ======================================== */
+
+.modes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+}
+
+.mode-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+    background: var(--bg-primary);
+    /* Pure white cards */
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-decoration: none;
+    transition: var(--transition-all);
+    cursor: pointer;
+    min-height: 200px;
+    position: relative;
+}
+
+.mode-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--jsw-primary);
+}
+
+/* Recommendation Badge */
+.mode-card__badge {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    background: var(--jsw-primary);
+    color: white;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Icon */
+.mode-card__icon {
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--neutral-100);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-2);
+    transition: var(--transition-all);
+}
+
+.mode-card__icon-img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(0.5);
+    transition: var(--transition-all);
+}
+
+.mode-card:hover .mode-card__icon {
+    background: var(--jsw-primary);
+}
+
+.mode-card:hover .mode-card__icon-img {
+    filter: brightness(0) invert(1);
+    transform: scale(1.1);
+}
+
+/* Content */
+.mode-card__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
+}
+
+.mode-card__description {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0 0 var(--space-3);
+}
+
+.mode-card__meta {
+    font-size: var(--text-xs);
+    color: var(--jsw-primary);
+    font-weight: var(--weight-medium);
+    font-style: italic;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+.footer {
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-light);
+    padding: var(--space-6) 0;
+}
+
+.footer__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-8);
+    text-align: center;
+}
+
+.footer__text {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.footer__copyright {
+    display: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .modes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero__title {
+        font-size: var(--text-3xl);
+    }
+}

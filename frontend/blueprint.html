@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint Estimation - JSW Paint Estimator</title>
+    <meta name="description"
+        content="Upload architectural floor plans for automated room detection and paint estimation">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/estimation-pages.css">
+    <link rel="stylesheet" href="css/liquid-loader.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-bar__container">
+            <a href="landing.html" class="nav-bar__logo">
+                <img src="jsw-logo-new.jpg" alt="JSW Paints" class="nav-bar__logo-img">
+                <span class="nav-bar__title">Smart Paint Estimator</span>
+            </a>
+            <div class="nav-bar__actions">
+                <a href="landing.html" class="btn btn--secondary btn--sm">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 14L2 8l6-6M2 8h12" />
+                    </svg>
+                    Back
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="main__container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-header__title">Blueprint Estimation</h1>
+                <p class="page-header__subtitle">Upload architectural floor plans for automatic multi-room detection and
+                    precise calculations</p>
+            </div>
+
+            <!-- Upload Card -->
+            <div class="estimation-card">
+                <form id="blueprint-form" enctype="multipart/form-data">
+                    <!-- Upload Zone -->
+                    <div id="upload-section">
+                        <div class="upload-zone" id="blueprint-drop-zone">
+                            <div class="upload-zone__icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="8" y="8" width="32" height="32" rx="2" />
+                                    <path d="M8 18h32M18 8v32M28 18v22M8 28h10M30 28h10" />
+                                </svg>
+                            </div>
+                            <h3 class="upload-zone__title">Drop floor plan here or click to browse</h3>
+                            <p class="upload-zone__subtitle">Supported: PDF, JPG, PNG | Clear architectural drawings
+                                work best</p>
+                            <input type="file" id="blueprint-input" accept="image/*,.pdf" hidden>
+                            <button type="button" class="btn btn--secondary"
+                                onclick="document.getElementById('blueprint-input').click()">
+                                Select Floor Plan
+                            </button>
+                            <p class="upload-zone__hint">Ensure room labels and dimensions are clearly visible</p>
+                        </div>
+
+                        <!-- Blueprint Preview -->
+                        <div id="blueprint-preview" style="display: none; margin-top: 2rem;">
+                            <h3 style="margin-bottom: 1rem;">Uploaded Floor Plan</h3>
+                            <div style="position: relative;">
+                                <img id="blueprint-preview-img"
+                                    style="max-width: 100%; border-radius: 16px; box-shadow: var(--shadow-lg); border: 2px solid var(--neutral-200);">
+                                <button type="button" class="btn btn--tertiary" style="margin-top: 1rem;"
+                                    onclick="removeBlueprint()">
+                                    Remove & Upload Different
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Section (shown after upload) -->
+                    <div id="config-section" style="display: none;">
+                        <div class="form-section">
+                            <h2 class="form-section__title">Configuration</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                                Our AI will automatically detect rooms. Please provide the following details:
+                            </p>
+
+                            <div class="form-grid form-grid--2">
+                                <div class="form-field">
+                                    <label for="ceiling_height">Standard Ceiling Height (feet)</label>
+                                    <input type="number" id="ceiling_height" name="ceiling_height" min="7" max="20"
+                                        step="0.1" value="10.0" required>
+                                    <small style="color: var(--text-muted); font-size: var(--text-xs);">Typical
+                                        residential: 10 feet</small>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="paint_type">Paint Type</label>
+                                    <select id="paint_type" name="paint_type" required>
+                                        <option value="interior" selected>Interior Paint</option>
+                                        <option value="exterior">Exterior Paint</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-field form-field--checkbox">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="include_ceiling" name="include_ceiling">
+                                    <span class="checkbox-text">Paint all ceilings</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn--primary btn--lg" id="analyze-btn">
+                                Analyze Floor Plan & Calculate
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="10" cy="10" r="7" />
+                                    <path d="M10 6v4l3 2" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-container" class="results-container" style="display: none;"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <p class="footer__text">POC for JSW Paints</p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay with Liquid Loader -->
+    <div id="loading-overlay" class="loading-overlay loading-overlay--liquid" style="display: none;">
+        <div class="liquid-loader">
+            <div class="liquid-bar" data-index="0">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="1">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="2">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="3">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="4">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="5">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+            <div class="liquid-bar" data-index="6">
+                <div class="droplet"></div>
+                <div class="bar-fill">
+                    <div class="surface-tension"></div>
+                    <div class="liquid-wave"></div>
+                    <div class="shimmer"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="base-droplet"></div>
+            </div>
+        </div>
+        <p class="loading-text">Analyzing floor plan...</p>
+        <p style="font-size: var(--text-sm); color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">
+            Detecting rooms and extracting dimensions
+        </p>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="js/blueprint-estimation.js"></script>
+</body>
+
+</html>

@@ -67,10 +67,10 @@ class DetectionService:
         if target_classes is None:
             target_classes = ['door', 'window']
         
-        if self.model_loaded and self.model is not None:
-            return self._detect_with_yolo(image, target_classes)
-        else:
-            return self._detect_with_fallback(image, target_classes)
+        # IMPORTANT: YOLO model is pretrained COCO (80 classes) without door/window classes
+        # Always use fallback CV detection for door/window detection
+        # For other object types, could use YOLO if needed in future
+        return self._detect_with_fallback(image, target_classes)
     
     def _detect_with_yolo(
         self,
@@ -125,37 +125,57 @@ class DetectionService:
     ) -> List[Dict[str, Any]]:
         """
         Fallback detection using traditional CV methods.
-        This is a simple edge-based detection for rectangular shapes.
+        Uses edge detection and contour analysis to find rectangular shapes.
+        Classifies them as doors/windows based on aspect ratio.
         """
         detections = []
         
         # Convert to grayscale
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         
-        # Apply edge detection
-        edges = cv2.Canny(gray, 50, 150)
+        # Apply Gaussian blur to reduce noise
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+        
+        # Apply edge detection with adaptive thresholds
+        edges = cv2.Canny(blurred, 30, 100)
+        
+        # Dilate edges to connect broken lines
+        kernel = np.ones((3, 3), np.uint8)
+        edges = cv2.dilate(edges, kernel, iterations=1)
         
         # Find contours
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
         # Filter contours by area and aspect ratio
         height, width = image.shape[:2]
-        min_area = (width * height) * 0.01  # Minimum 1% of image area
+        min_area = (width * height) * 0.005  # Minimum 0.5% of image area (reduced from 1%)
+        max_area = (width * height) * 0.5    # Maximum 50% of image area
         
         for contour in contours:
             area = cv2.contourArea(contour)
             
-            if area > min_area:
+            if min_area < area < max_area:
                 # Get bounding rectangle
                 x, y, w, h = cv2.boundingRect(contour)
                 aspect_ratio = float(w) / h if h > 0 else 0
                 
-                # Doors are typically taller (aspect ratio < 1)
-                # Windows are typically wider or square (aspect ratio >= 1)
-                if 0.3 < aspect_ratio < 0.8:
+                # Calculate how rectangular the contour is
+                rect_area = w * h
+                extent = area / rect_area if rect_area > 0 else 0
+                
+                # Only consider roughly rectangular shapes (>40% filled)
+                if extent < 0.4:
+                    continue
+                
+                # Classify based on aspect ratio:
+                # Doors: taller than wide (aspect ratio 0.3-0.75)
+                # Windows: wider or square (aspect ratio 0.75-3.0)
+                if 0.3 < aspect_ratio < 0.75:
                     class_name = "door"
-                elif 0.8 <= aspect_ratio < 2.5:
+                    confidence = 0.65
+                elif 0.75 <= aspect_ratio < 3.0:
                     class_name = "window"
+                    confidence = 0.70
                 else:
                     continue
                 
@@ -163,7 +183,7 @@ class DetectionService:
                 if class_name in target_classes:
                     detections.append({
                         "class_name": class_name,
-                        "confidence": 0.6,  # Arbitrary confidence for fallback
+                        "confidence": confidence,
                         "bbox": {
                             "x": x,
                             "y": y,
