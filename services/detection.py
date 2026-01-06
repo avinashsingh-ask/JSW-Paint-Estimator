@@ -148,8 +148,12 @@ class DetectionService:
         
         # Filter contours by area and aspect ratio
         height, width = image.shape[:2]
-        min_area = (width * height) * 0.005  # Minimum 0.5% of image area (reduced from 1%)
+        min_area = (width * height) * 0.02   # Minimum 2% of image area (increased from 0.5%)
         max_area = (width * height) * 0.5    # Maximum 50% of image area
+        
+        # Minimum absolute dimensions to filter out noise
+        min_width_px = max(50, width * 0.05)   # At least 50px or 5% of image width
+        min_height_px = max(80, height * 0.08) # At least 80px or 8% of image height
         
         for contour in contours:
             area = cv2.contourArea(contour)
@@ -157,14 +161,20 @@ class DetectionService:
             if min_area < area < max_area:
                 # Get bounding rectangle
                 x, y, w, h = cv2.boundingRect(contour)
+                
+                # Filter by minimum dimensions
+                if w < min_width_px or h < min_height_px:
+                    continue
+                
                 aspect_ratio = float(w) / h if h > 0 else 0
                 
                 # Calculate how rectangular the contour is
                 rect_area = w * h
                 extent = area / rect_area if rect_area > 0 else 0
                 
-                # Only consider roughly rectangular shapes (>40% filled)
-                if extent < 0.4:
+                # Only consider well-defined rectangular shapes (>60% filled)
+                # This filters out irregular patterns in wall textures
+                if extent < 0.6:  # Increased from 0.4
                     continue
                 
                 # Classify based on aspect ratio:

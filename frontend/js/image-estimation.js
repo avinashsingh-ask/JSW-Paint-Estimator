@@ -266,17 +266,20 @@ async function handleSingleSubmit(e) {
             body: formData
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorDetail = data.detail || 'Analysis failed';
+            showToast('error', 'Analysis Failed', errorDetail);
+            return;
         }
 
-        const data = await response.json();
         displayResults(data);
         showToast('success', 'Analysis Complete', 'Room dimensions extracted successfully');
 
     } catch (error) {
         console.error('Error:', error);
-        showToast('error', 'Analysis Failed', 'Please try again with a clearer image');
+        showToast('error', 'Network Error', 'Please check your connection and try again');
     } finally {
         showLoading(false);
     }
@@ -318,17 +321,20 @@ async function handleMultiSubmit(e) {
             body: formData
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorDetail = data.detail || 'Analysis failed';
+            showToast('error', 'Analysis Failed', errorDetail);
+            return;
         }
 
-        const data = await response.json();
         displayResults(data);
         showToast('success', 'Analysis Complete', 'Multi-wall estimation completed');
 
     } catch (error) {
         console.error('Error:', error);
-        showToast('error', 'Analysis Failed', 'Please try again');
+        showToast('error', 'Network Error', 'Please check your connection and try again');
     } finally {
         showLoading(false);
     }

@@ -211,9 +211,13 @@ class ScalingService:
                 detections=detections,
                 image_shape=image_shape
             )
+        else:
+            # No detections - explicitly reset scale to None
+            self.scale_factor = None
+            self.reference_object = None
         
         if self.scale_factor is None:
-            # No valid scale could be determined
+            # No valid scale could be determined - return default estimates
             return {
                 "length": 12.0,
                 "width": 10.0,
